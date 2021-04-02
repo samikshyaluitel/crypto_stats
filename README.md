@@ -1,69 +1,84 @@
 # crypto_stats
-Crypto Server
 
-Create a micro-service with the following endpoint,
+## Dependency manager
 
-GET /currency/{symbol}
+GOMOD
 
-Returns the real-time crypto prices of the given currency symbol.
+## HOW TO BUILD AND RUN
 
-Sample Response:
-{
-"id": "ETH",
-"fullName": "Ethereum",
-"ask": "0.054464",
-"bid": "0.054463",
-"last": "0.054463",
-"open": "0.057133",
-"low": "0.053615",
-"high": "0.057559",
-"feeCurrency": "BTC"
-}
+    make build_dependency run
 
-GET /currency/all
+# CONFIGURABLE PARMAS
 
-Returns the real-time crypto prices of all the supported currencies.
-Response:
+    ./bin/crypto "<comma separated symbols>"
 
-{
-"currencies": [
-{
-"id": "ETH",
-"fullName": "Ethereum",
-"ask": "0.054464",
-"bid": "0.054463",
-"last": "0.054463",
-"open": "0.057133",
-"low": "0.053615",
-"high": "0.057559",
-"feeCurrency": "BTC"
-},
+# DEFAULT PARAMS
 
-{
-"id": "BTC",
-"fullName": "Bitcoin",
-"ask":"7906.72",
-"bid":"7906.28",
-"last":"7906.48",
-"open":"7952.3",
-"low":"7561.51",
-"high":"8107.96",
-"feeCurrency": "USD"
-}
+    'BTCUSD,ETHBTC'
+
+# ENDPOINTS
+
+    `http://localhost:8080/currency/<SUPPORTED_SYMBOL>`
+
+NOTE: to get all the symbol details, replace `SUPPORTED_SYMBOL` with `all`
+
+eg
+
+## REQ:-> http://localhost:8080/currency/all
+
+---
+
+RESP
+
+```json
+[
+  {
+    "id": "BTCUSD",
+    "fullName": "",
+    "ask": "5127.99",
+    "bid": "5123.77",
+    "last": "5124.33",
+    "open": "5262.15",
+    "low": "5015.01",
+    "high": "5536.48",
+    "feeCurrency": "USD"
+  },
+  {
+    "id": "ETHBTC",
+    "fullName": "",
+    "ask": "0.021892",
+    "bid": "0.021889",
+    "last": "0.021892",
+    "open": "0.022054",
+    "low": "0.021546",
+    "high": "0.022260",
+    "feeCurrency": "BTC"
+  }
 ]
+```
+
+## REQ:-> http://localhost:8080/currency/ETHBTC
+
+RESP
+
+```json
+{
+  "id": "BTCUSD",
+  "fullName": "",
+  "ask": "5101.33",
+  "bid": "",
+  "last": "5100.88",
+  "open": "5230.25",
+  "low": "5015.01",
+  "high": "5536.48",
+  "feeCurrency": "USD"
 }
+```
 
-Note:
-At the moment the supported symbols are only BTCUSD and ETHBTC but must be configurable. symbol must
-be a valid symbol. For this API please sync the real-time currency info in background from Socket Market Data
-store it in-memory and serve the values from there.
-Rules
+## REQ:-> http://localhost:8080/currency/ABCD
 
-Golang must be used to complete the challenge.
-No code generators must be used.
-Avoid using external libraries and if you use so, please justify their use.
-Dependencies need to be managed if you use any external libraries.
+RESP
 
-Solution must be able to be readily run or deployed and of production quality. Twelve-Factor app in
-short.
-Ideal time to complete this challenge is 8 hours.
+```json
+"Symbol ABCD not supported"
+```
